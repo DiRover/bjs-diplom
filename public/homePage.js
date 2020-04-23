@@ -8,11 +8,12 @@ logoutButton.action = fn => {
         }
     })        
 }
-ApiConnector.current = fn => {
-    if (response.success) {
-        ProfileWidget.showProfile(response);
+
+ApiConnector.current( response => {
+    if (response) {
+        ProfileWidget.showProfile(response.data);
     }
-}
+})
 
 const ratesBoard = new RatesBoard();
 function currency() {
@@ -25,3 +26,64 @@ function currency() {
 }
 currency();
 setInterval(currency, 60000);
+
+const moneyManager = new MoneyManager();
+moneyManager.addMoneyCallback = data => {
+    ApiConnector.addMoney(data, response => {
+        if (response.success) {
+            ProfileWidget.showProfile(response.data);
+        } else {
+            moneyManager.setMessage(response.data);
+        }
+    })
+}
+moneyManager.conversionMoneyCallback = data => {
+    ApiConnector.convertMoney(data, response => {
+        if (response.success) {
+            ProfileWidget.showProfile(response.data);
+        } else {
+            moneyManager.setMessage(response.data);
+        }
+    })
+}
+moneyManager.sendMoneyCallback = data => {
+    ApiConnector.transferMoney(data, response => {
+        if (response.success) {
+            ProfileWidget.showProfile(response.data);
+        } else {
+            moneyManager.setMessage(response.data);
+        }
+    })
+}
+const favoritesWidget = new FavoritesWidget();
+ApiConnector.getFavorites(response => {
+    if (response) {
+        favoritesWidget.clearTable();
+        favoritesWidget.fillTable(response.data);
+        MoneyManager.updateUsersList = response.data;
+    }
+})
+favoritesWidget.addUserCallback = data => {
+    ApiConnector.addUserToFavorites(data, response => {
+        if (response) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(response.data);
+            MoneyManager.updateUsersList = response.data;
+            favoritesWidget.setMessage(response.data);
+        } else {
+            favoritesWidget.setMessage(response.data);
+        }
+    })
+}
+favoritesWidget.removeUserCallback = data => {
+    ApiConnector.removeUserFromFavorites(data, response => {
+        if (response) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(response.data);
+            MoneyManager.updateUsersList = response.data;
+            favoritesWidget.setMessage(response.data);
+        } else {
+            favoritesWidget.setMessage(response.data);
+        }
+    })
+}
