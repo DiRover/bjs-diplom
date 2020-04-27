@@ -32,8 +32,9 @@ moneyManager.addMoneyCallback = data => {
     ApiConnector.addMoney(data, response => {
         if (response.success) {
             ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(response.data, "The money was added");
         } else {
-            moneyManager.setMessage(response.data);
+            moneyManager.setMessage(response.data, "The money wasn't added");
         }
     })
 }
@@ -41,8 +42,9 @@ moneyManager.conversionMoneyCallback = data => {
     ApiConnector.convertMoney(data, response => {
         if (response.success) {
             ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(response.data, "The money was converted");
         } else {
-            moneyManager.setMessage(response.data);
+            moneyManager.setMessage(response.data, "The money wasn't converted");
         }
     })
 }
@@ -50,8 +52,9 @@ moneyManager.sendMoneyCallback = data => {
     ApiConnector.transferMoney(data, response => {
         if (response.success) {
             ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(response.data, "The money was sent");
         } else {
-            moneyManager.setMessage(response.data);
+            moneyManager.setMessage(response.data, "The money wasn't sent");
         }
     })
 }
@@ -60,7 +63,7 @@ ApiConnector.getFavorites(response => {
     if (response) {
         favoritesWidget.clearTable();
         favoritesWidget.fillTable(response.data);
-        MoneyManager.updateUsersList = response.data;
+        moneyManager.updateUsersList(response.data);
     }
 })
 favoritesWidget.addUserCallback = data => {
@@ -68,10 +71,10 @@ favoritesWidget.addUserCallback = data => {
         if (response) {
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
-            MoneyManager.updateUsersList = response.data;
-            favoritesWidget.setMessage(response.data);
+            moneyManager.updateUsersList(response.data);
+            favoritesWidget.setMessage(response.data, "The user has been added");
         } else {
-            favoritesWidget.setMessage(response.data);
+            favoritesWidget.setMessage(response.data, "The user is not added");
         }
     })
 }
@@ -80,10 +83,10 @@ favoritesWidget.removeUserCallback = data => {
         if (response) {
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
-            MoneyManager.updateUsersList = response.data;
-            favoritesWidget.setMessage(response.data);
+            moneyManager.updateUsersList(response.data);
+            favoritesWidget.setMessage(response.data, "The user has been removed");
         } else {
-            favoritesWidget.setMessage(response.data);
+            favoritesWidget.setMessage(response.data, "The user is not removed");
         }
     })
 }

@@ -6,16 +6,16 @@ userForm.loginFormCallback = data => {
       if (response.success) {
         location.reload();
       } else {
-        console.error(`Error, this staff doesn't work`)
+        userForm.setLoginErrorMessage("Please, enter valid data");
         }
     })
 }
 userForm.registerFormCallback = data => {   
-    ApiConnector.login(data, response => {
+    ApiConnector.register(data, response => {
         if (response.success) {
             location.reload();
         } else {
-            console.error(`Error, this staff doesn't work`)
+          userForm.setRegisterErrorMessage("Registration wasn't successful");
         }
     })
 }
